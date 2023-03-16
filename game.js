@@ -15,10 +15,15 @@ class Table {
       for (let j = 1; j <= this.args.length; j++) {
         if (i === j) {
           table[i][j] = "Draw";
+          console.log("It's draw");
         } else if ((j - i + this.args.length) % this.args.length <= (this.args.length - 1) / 2) {
           table[i][j] = "Win";
+          console.log("You win");
+          console.log("Computer lose");
         } else {
           table[i][j] = "Lose";
+          console.log("Computer win");
+          console.log("You lose");
         }
       }
     }
@@ -97,11 +102,23 @@ class Game {
         this.play();
         return;
       }
-      const computerMoveIndex = Math.floor(Math.random() * this.args.length);
-      const result = this.table[choiceIndex + 1][computerMoveIndex + 1];
-      console.log(`Your move: ${userMove}`);
-      console.log(`Computer move: ${computerMove}`);
-      console.log(`Result: ${result}`);
+      const halfLength = this.args.length / 2;
+      const steps = [...Array(this.args.length).keys()].map((i) => this.args[(i + choiceIndex + 1) % this.args.length]);
+      const winningMoves = steps.slice(0, halfLength);
+      const losingMoves = steps.slice(halfLength, this.args.length);
+      if (userMove === computerMove) {
+        console.log(`Your move: ${userMove}`);
+        console.log(`Computer move: ${computerMove}`);
+        console.log("Draw!");
+      } else {
+        console.log(`Your move: ${userMove}`);
+        console.log(`Computer move: ${computerMove}`);
+        if (winningMoves.includes(computerMove)) {
+          console.log("Computer wins!");
+        } else if (losingMoves.includes(computerMove)) {
+          console.log("You win!");
+        }
+      }
       console.log(`HMAC key: ${this.key}`);
       readline.close();
     });
